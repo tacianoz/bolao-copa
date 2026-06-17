@@ -184,7 +184,27 @@ export const store = {
     const raw = localStorage.getItem("bolao.session");
     this.user = raw ? JSON.parse(raw) : null;
     this._seedDemoPlayers();
+    this._seedTestAccounts();
     this._emit();
+  },
+
+  // Conta(s) de teste no modo treino: os e-mails de APP.admins já entram
+  // prontos com a senha padrão abaixo (só vale para o modo local/demo).
+  _seedTestAccounts() {
+    const SENHA_TESTE = "treta2026";
+    const users = this._localUsers();
+    let changed = false;
+    APP.admins.forEach((raw, i) => {
+      const email = (raw || "").toLowerCase();
+      if (!email || users[email]) return;
+      users[email] = {
+        uid: "admin_" + i, email, password: SENHA_TESTE,
+        displayName: email.split("@")[0], posto: "Chefia da Treta 👑",
+        avatar: "👑", picks: {}
+      };
+      changed = true;
+    });
+    if (changed) this._saveLocalUsers(users);
   },
   _localUsers() { return JSON.parse(localStorage.getItem("bolao.users") || "{}"); },
   _saveLocalUsers(u) { localStorage.setItem("bolao.users", JSON.stringify(u)); },
