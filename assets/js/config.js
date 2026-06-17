@@ -49,7 +49,7 @@ export const APP = {
   //  acerto da grana acontecem por fora (PIX no grupo, na unha, como preferir).
   // -------------------------------------------------------------------------
   premiacao: {
-    cota: 50,        // valor da entrada por pessoa
+    cota: 100,       // valor da entrada por pessoa
     moeda: "R$",
     // Como o pote é dividido no fim da Copa (a soma das % deve dar 100).
     divisao: [
