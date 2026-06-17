@@ -100,7 +100,7 @@ export const store = {
       sendEmailVerification: authMod.sendEmailVerification,
       signOut: authMod.signOut,
       updateProfile: authMod.updateProfile,
-      doc: dbMod.doc, getDoc: dbMod.getDoc, setDoc: dbMod.setDoc,
+      doc: dbMod.doc, getDoc: dbMod.getDoc, setDoc: dbMod.setDoc, deleteDoc: dbMod.deleteDoc,
       collection: dbMod.collection, getDocs: dbMod.getDocs
     };
 
@@ -176,34 +176,36 @@ export const store = {
     Object.assign(this.user, p);
     await this._fbSavePicks(await this._fbGetPicks(this.user.uid));
   },
+  async _fbRemovePlayer(uid) {
+    // Remove o jogador do bolão (apaga os palpites/ranking). A conta de
+    // autenticação em si só pode ser apagada pelo console do Firebase.
+    await this._fb.deleteDoc(this._fb.doc(this._fb.db, "predictions", uid));
+  },
 
   // ==========================================================================
   //  MODO LOCAL (localStorage)
   // ==========================================================================
   _initLocal() {
+    this._purgeSeedUsers();
     const raw = localStorage.getItem("bolao.session");
     this.user = raw ? JSON.parse(raw) : null;
-    this._seedDemoPlayers();
-    this._seedTestAccounts();
+    // Se a sessão era de uma conta de teste já removida, desloga.
+    if (this.user) {
+      const exists = Object.values(this._localUsers()).some((u) => u.uid === this.user.uid);
+      if (!exists) { localStorage.removeItem("bolao.session"); this.user = null; }
+    }
     this._emit();
   },
 
-  // Conta(s) de teste no modo treino: os e-mails de APP.admins já entram
-  // prontos com a senha padrão abaixo (só vale para o modo local/demo).
-  _seedTestAccounts() {
-    const SENHA_TESTE = "treta2026";
+  // Remove contas de teste/demonstração que possam ter ficado salvas no
+  // navegador em versões anteriores (Zé do Chute, contas "admin_" etc.).
+  _purgeSeedUsers() {
     const users = this._localUsers();
     let changed = false;
-    APP.admins.forEach((raw, i) => {
-      const email = (raw || "").toLowerCase();
-      if (!email || users[email]) return;
-      users[email] = {
-        uid: "admin_" + i, email, password: SENHA_TESTE,
-        displayName: email.split("@")[0], posto: "Chefia da Treta 👑",
-        avatar: "👑", picks: {}
-      };
-      changed = true;
-    });
+    for (const [email, u] of Object.entries(users)) {
+      const seed = (u.uid || "").startsWith("demo_") || (u.uid || "").startsWith("admin_") || /@bolao\.gg$/.test(email);
+      if (seed) { delete users[email]; changed = true; }
+    }
     if (changed) this._saveLocalUsers(users);
   },
   _localUsers() { return JSON.parse(localStorage.getItem("bolao.users") || "{}"); },
@@ -247,31 +249,13 @@ export const store = {
   _localAllPlayers() {
     return Object.values(this._localUsers()).map((u) => ({
       uid: u.uid, displayName: u.displayName, posto: u.posto,
-      avatar: u.avatar, picks: u.picks || {}
+      avatar: u.avatar, email: u.email, picks: u.picks || {}
     }));
   },
-
-  // Adiciona "diplomatas" fictícios ao ranking local (apenas demonstração).
-  _seedDemoPlayers() {
+  _localRemovePlayer(uid) {
     const users = this._localUsers();
-    if (Object.keys(users).some((k) => k.startsWith("demo"))) return;
-    const demos = [
-      { n: "Zé do Chute", p: "Boteco da esquina 🍺", a: "🍺",
-        picks: { "A-MD1-1": { h: 2, a: 0 }, "C-MD1-1": { h: 2, a: 1 }, "E-MD1-1": { h: 5, a: 0 }, "D-MD1-1": { h: 3, a: 1 } } },
-      { n: "Cabeça de Bagre", p: "Sofá da vó 🛋️", a: "🗿",
-        picks: { "A-MD1-1": { h: 1, a: 0 }, "C-MD1-1": { h: 1, a: 1 }, "F-MD1-1": { h: 2, a: 2 }, "H-MD1-1": { h: 0, a: 0 } } },
-      { n: "Tia do Zap", p: "Grupo da família 📱", a: "📱",
-        picks: { "A-MD1-2": { h: 2, a: 1 }, "B-MD1-1": { h: 1, a: 1 }, "D-MD1-2": { h: 2, a: 0 }, "G-MD1-2": { h: 1, a: 1 } } },
-      { n: "Mister M Mistério", p: "Sei lá onde 👽", a: "👽",
-        picks: { "E-MD1-1": { h: 7, a: 1 }, "F-MD1-2": { h: 3, a: 0 }, "C-MD1-2": { h: 1, a: 0 }, "H-MD1-2": { h: 2, a: 1 } } }
-    ];
-    demos.forEach((d, i) => {
-      users["demo" + i + "@bolao.gg"] = {
-        uid: "demo_" + i, email: "demo" + i + "@bolao.gg",
-        password: "—", displayName: d.n, posto: d.p, avatar: d.a, picks: d.picks
-      };
-    });
-    this._saveLocalUsers(users);
+    const email = Object.keys(users).find((e) => users[e].uid === uid);
+    if (email) { delete users[email]; this._saveLocalUsers(users); }
   },
 
   // ==========================================================================
@@ -296,5 +280,9 @@ export const store = {
   },
   async updateProfile(p) {
     return this.mode === "firebase" ? this._fbUpdateProfile(p) : this._localUpdateProfile(p);
+  },
+  async removePlayer(uid) {
+    if (!this.isAdmin()) throw new Error("Só admin pode remover jogador.");
+    return this.mode === "firebase" ? this._fbRemovePlayer(uid) : this._localRemovePlayer(uid);
   }
 };

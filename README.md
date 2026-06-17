@@ -43,10 +43,14 @@ Pra todo mundo logar com e-mail e disputar o mesmo ranking, use o **Firebase**
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // cada um lê o ranking de todos, mas só edita o próprio palpite
+    // cada um lê o ranking de todos e edita o próprio palpite;
+    // admins (e-mails abaixo) podem remover qualquer jogador
     match /predictions/{uid} {
       allow read: if request.auth != null;
-      allow write: if request.auth != null && request.auth.uid == uid;
+      allow write: if request.auth != null && (
+        request.auth.uid == uid ||
+        request.auth.token.email in ['tacianoz@gmail.com']
+      );
     }
     // resultados oficiais: todos leem; lança quem estiver logado (admin no app)
     match /results/official {

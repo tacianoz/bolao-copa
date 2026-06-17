@@ -53,6 +53,7 @@ function layout() {
   else if (state.route === "ranking") main.appendChild(viewRanking());
   else if (state.route === "bolada") main.appendChild(viewBolada());
   else if (state.route === "regras") main.appendChild(viewRegras());
+  else if (state.route === "admin") main.appendChild(store.isAdmin() ? viewAdmin() : viewJogos());
   else if (state.route === "perfil") main.appendChild(viewPerfil());
   wrap.appendChild(main);
   wrap.appendChild(footer());
@@ -77,6 +78,7 @@ function header() {
         <button data-r="ranking">🏆 Ranking</button>
         <button data-r="bolada">💰 Bolada</button>
         <button data-r="regras">📜 Regras</button>
+        ${store.isAdmin() ? `<button data-r="admin">🛠️ Admin</button>` : ""}
         <button data-r="perfil" class="nav-user">${u.avatar} ${esc(u.displayName)} ${modeBadge}</button>
       </nav>
     </header>`);
@@ -455,6 +457,58 @@ function viewBolada() {
     }
     box.appendChild(el(`<p class="disclaimer">💡 O app só mostra a divisão pra todo mundo ficar de olho. O pagamento da cota e a entrega do prêmio acontecem por fora (PIX no grupo). Sem treta. 😇</p>`));
   });
+  return v;
+}
+
+// ============================================================================
+//  ADMIN — gestão de usuários (só para e-mails em APP.admins)
+// ============================================================================
+function viewAdmin() {
+  const v = el(`<section class="view"></section>`);
+  v.appendChild(el(`<div class="hero"><div class="hero-l"><h2>Painel do Chefe 🛠️</h2><p>Gestão da galera do bolão. Remova quem não pagou, quem desistiu ou os perfis duplicados.</p></div></div>`));
+
+  const modeInfo = store.mode === "firebase"
+    ? `Modo on-line (Firebase): remover apaga os palpites e tira do ranking. A conta de login em si só some pelo console do Firebase.`
+    : `Modo treino (local): tudo salvo só neste navegador. Remover apaga o jogador deste dispositivo.`;
+  v.appendChild(el(`<p class="disclaimer">ℹ️ ${esc(modeInfo)}</p>`));
+
+  const box = el(`<div class="admin-list"><p class="vazio">Carregando a galera…</p></div>`);
+  v.appendChild(box);
+
+  function load() {
+    store.allPlayers().then((players) => {
+      const ranked = players
+        .map((p) => ({ ...p, ...totalPoints(p.picks, state.results) }))
+        .sort((a, b) => b.total - a.total);
+      box.innerHTML = "";
+      box.appendChild(el(`<div class="admin-count">👥 <b>${players.length}</b> ${players.length === 1 ? "jogador" : "jogadores"} no bolão</div>`));
+      if (!players.length) { box.appendChild(el(`<p class="vazio">Ninguém cadastrado ainda.</p>`)); return; }
+      ranked.forEach((p) => {
+        const me = p.uid === store.user.uid;
+        const isAdmin = (p.email && APP.admins.includes(p.email.toLowerCase()));
+        const row = el(`
+          <div class="admin-row ${me ? "me" : ""}">
+            <div class="ar-av">${p.avatar || "🎩"}</div>
+            <div class="ar-id">
+              <b>${esc(p.displayName)}${isAdmin ? " <span class='tag-admin'>admin</span>" : ""}${me ? " <span class='tag-you'>você</span>" : ""}</b>
+              <small>${esc(p.email || "—")} · ${esc(p.posto || "sem posto")}</small>
+            </div>
+            <div class="ar-stat"><b>${p.total}</b><span>pts</span></div>
+            <div class="ar-stat"><b>${Object.keys(p.picks).length}</b><span>palpites</span></div>
+            <button class="ar-del" ${me ? "disabled title='Não dá pra remover você mesmo'" : ""}>🗑️ Remover</button>
+          </div>`);
+        const del = row.querySelector(".ar-del");
+        if (del && !me) del.addEventListener("click", async () => {
+          if (!confirm(`Remover "${p.displayName}" do bolão? Os palpites dele serão apagados. Essa ação não volta.`)) return;
+          del.disabled = true; del.textContent = "removendo…";
+          try { await store.removePlayer(p.uid); toast("Jogador removido ✔"); load(); }
+          catch (e) { toast("Deu ruim ao remover 😬", true); del.disabled = false; del.textContent = "🗑️ Remover"; }
+        });
+        box.appendChild(row);
+      });
+    }).catch(() => { box.innerHTML = ""; box.appendChild(el(`<p class="vazio">Não consegui carregar a galera. 😬</p>`)); });
+  }
+  load();
   return v;
 }
 
