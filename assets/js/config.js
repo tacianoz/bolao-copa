@@ -12,12 +12,12 @@
 // ============================================================================
 
 export const FIREBASE_CONFIG = {
-  apiKey: "",                 // <- cole aqui a apiKey do seu projeto Firebase
-  authDomain: "",             // ex: bolao-copa-2026.firebaseapp.com
-  projectId: "",              // ex: bolao-copa-2026
-  storageBucket: "",
-  messagingSenderId: "",
-  appId: ""
+  apiKey: "AIzaSyD3QXhTMfr0zl4ONQGiFdXlGceFppdofQ4",
+  authDomain: "bolao-copa-e83e0.firebaseapp.com",
+  projectId: "bolao-copa-e83e0",
+  storageBucket: "bolao-copa-e83e0.firebasestorage.app",
+  messagingSenderId: "1099111977780",
+  appId: "1:1099111977780:web:bd5c00683d94cc29ef8b61"
 };
 
 export const APP = {
