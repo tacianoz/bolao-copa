@@ -1,0 +1,51 @@
+# ============================================================================
+#  Atualização automática dos resultados — "Treta das Nações"
+#  Roda DENTRO do GitHub (GitHub Actions). Você NÃO precisa de cron externo.
+# ============================================================================
+name: Atualiza resultados da Copa
+
+on:
+  # Agendador embutido do GitHub (horários em UTC).
+  # Brasília = UTC-3, então isto roda ~ 06h, 12h, 18h e 23h de Brasília.
+  schedule:
+    - cron: "0 9,15,21,2 * * *"
+  # Botão para rodar na hora, manualmente, pela aba "Actions".
+  workflow_dispatch:
+
+# Permite que a Action faça commit do results.json de volta no repositório.
+permissions:
+  contents: write
+
+# Evita execuções sobrepostas.
+concurrency:
+  group: atualiza-resultados
+  cancel-in-progress: false
+
+jobs:
+  atualizar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar o repositório
+        uses: actions/checkout@v4
+
+      - name: Preparar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Buscar resultados e atualizar JSON
+        env:
+          FOOTBALL_DATA_TOKEN: ${{ secrets.FOOTBALL_DATA_TOKEN }}
+        run: node scripts/update-results.mjs
+
+      - name: Commitar mudanças (se houver)
+        run: |
+          git config user.name  "Robô da Treta 🤖"
+          git config user.email "actions@github.com"
+          if [ -n "$(git status --porcelain assets/data/results.json)" ]; then
+            git add assets/data/results.json
+            git commit -m "🤖 Atualiza placares e mata-mata da Copa"
+            git push
+          else
+            echo "Nada mudou — sem placar novo por enquanto."
+          fi
