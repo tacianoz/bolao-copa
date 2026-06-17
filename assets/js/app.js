@@ -333,7 +333,7 @@ function matchCard(m) {
         ${result ? `<span class="real">Deu nisso: <b>${result.h} × ${result.a}</b></span>`
           : locked ? `<span class="lockmsg">🔒 Fechou, parça</span>`
           : `<span class="opening">🟢 Bora chutar!</span>`}
-        ${pts !== null ? `<span class="badge q-${q}">${q === "cravou" ? "🎯 CRAVOU, MONSTRO!" : q === "saldo" ? "Quase! 😎" : q === "vencedor" ? "Acertou o vencedor 👍" : q === "parcial" ? "Migé 🤏" : "Errou feio 💀"} · ${pts} pts</span>` : ""}
+        ${pts !== null ? `<span class="badge q-${q}">${q === "cravou" ? "🎯 CRAVOU, MONSTRO!" : q === "saldo" ? "Quase! 😎" : q === "vencedor" ? "Acertou o vencedor 👍" : q === "parcial" ? "Migué 🤏" : "Errou feio 💀"} · ${pts} pts</span>` : ""}
         ${store.isAdmin() ? `<button class="link adm" data-adm="${m.id}">⚙️ botar o placar</button>` : ""}
       </div>
     </article>`);
@@ -552,7 +552,7 @@ function viewRegras() {
       <div class="rule"><span class="rb">${P.placarExato}</span><div><h4>🎯 Cravou o placar</h4><p>Acertou o placar na mosca. Tu é brabo demais. 🐐</p></div></div>
       <div class="rule"><span class="rb">${P.saldoVencedor}</span><div><h4>Vencedor + saldo</h4><p>Acertou quem ganhou (ou o empate) e o saldo de gols. Quase lá! 😎</p></div></div>
       <div class="rule"><span class="rb">${P.vencedor}</span><div><h4>Só o vencedor</h4><p>Acertou só quem levou a melhor (ou o empate). Tá valendo. 👍</p></div></div>
-      <div class="rule"><span class="rb">${P.golsTime}</span><div><h4>Migé (parcial)</h4><p>Errou o resultado, mas acertou os gols de um dos times. Migué conta. 🤏</p></div></div>
+      <div class="rule"><span class="rb">${P.golsTime}</span><div><h4>Migué (parcial)</h4><p>Errou o resultado, mas acertou os gols de um dos times. Migué conta. 🤏</p></div></div>
     </div>`));
   v.appendChild(el(`
     <div class="info">
