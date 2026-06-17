@@ -31,18 +31,32 @@ const GROUPS = {
   I: ["FRA", "SEN", "IRQ", "NOR"], J: ["ARG", "ALG", "AUT", "JOR"],
   K: ["POR", "COD", "UZB", "COL"], L: ["ENG", "CRO", "GHA", "PAN"]
 };
-const ROUND_PAIRS = { 1: [[0, 1], [2, 3]], 2: [[0, 2], [3, 1]], 3: [[0, 3], [1, 2]] };
+// Confrontos reais (precisa bater EXATAMENTE com GROUP_FIXTURES em assets/js/data.js).
+// Cada grupo: [mandante, visitante] na ordem R1, R1, R2, R2, R3, R3.
+const GROUP_FIXTURES = {
+  A: [["MEX","RSA"],["KOR","CZE"],["MEX","KOR"],["CZE","RSA"],["RSA","KOR"],["CZE","MEX"]],
+  B: [["CAN","BIH"],["QAT","SUI"],["CAN","QAT"],["SUI","BIH"],["SUI","CAN"],["BIH","QAT"]],
+  C: [["BRA","MAR"],["SCO","HAI"],["BRA","HAI"],["SCO","MAR"],["SCO","BRA"],["MAR","HAI"]],
+  D: [["USA","PAR"],["AUS","TUR"],["USA","AUS"],["TUR","PAR"],["PAR","AUS"],["TUR","USA"]],
+  E: [["GER","CUW"],["CIV","ECU"],["GER","CIV"],["ECU","CUW"],["ECU","GER"],["CUW","CIV"]],
+  F: [["NED","JPN"],["SWE","TUN"],["NED","SWE"],["TUN","JPN"],["JPN","SWE"],["TUN","NED"]],
+  G: [["BEL","EGY"],["IRN","NZL"],["BEL","IRN"],["NZL","EGY"],["EGY","IRN"],["NZL","BEL"]],
+  H: [["ESP","CPV"],["KSA","URU"],["ESP","KSA"],["URU","CPV"],["CPV","KSA"],["URU","ESP"]],
+  I: [["FRA","SEN"],["IRQ","NOR"],["FRA","IRQ"],["NOR","SEN"],["NOR","FRA"],["SEN","IRQ"]],
+  J: [["ARG","ALG"],["AUT","JOR"],["ARG","AUT"],["JOR","ALG"],["JOR","ARG"],["ALG","AUT"]],
+  K: [["POR","COD"],["UZB","COL"],["POR","UZB"],["COL","COD"],["COL","POR"],["COD","UZB"]],
+  L: [["ENG","CRO"],["GHA","PAN"],["ENG","GHA"],["PAN","CRO"],["CRO","GHA"],["PAN","ENG"]]
+};
 
 // Constrói o índice "par de seleções (grupo) -> id do nosso jogo".
 const groupPairIndex = {};
-for (const [letter, t] of Object.entries(GROUPS)) {
-  for (const md of [1, 2, 3]) {
-    ROUND_PAIRS[md].forEach((p, i) => {
-      const id = `${letter}-MD${md}-${i + 1}`;
-      groupPairIndex[`${t[p[0]]}|${t[p[1]]}`] = { id, home: t[p[0]], away: t[p[1]] };
-      groupPairIndex[`${t[p[1]]}|${t[p[0]]}`] = { id, home: t[p[0]], away: t[p[1]] };
-    });
-  }
+for (const [letter, fxs] of Object.entries(GROUP_FIXTURES)) {
+  fxs.forEach((fx, idx) => {
+    const id = `${letter}-MD${Math.floor(idx / 2) + 1}-${(idx % 2) + 1}`;
+    const slot = { id, home: fx[0], away: fx[1] };
+    groupPairIndex[`${fx[0]}|${fx[1]}`] = slot;
+    groupPairIndex[`${fx[1]}|${fx[0]}`] = slot;
+  });
 }
 
 // --- Nome/código da seleção -> nosso código de 3 letras ---------------------

@@ -81,51 +81,45 @@ const CITIES = [
   "São Francisco 🇺🇸", "Seattle 🇺🇸"
 ];
 
-// Confrontos por rodada dentro de um grupo de 4 (índices 0..3).
-// Garante que cada seleção enfrente as outras três.
-const ROUND_PAIRS = {
-  1: [[0, 1], [2, 3]],
-  2: [[0, 2], [3, 1]],
-  3: [[0, 3], [1, 2]]
-};
-
-// Datas (horário de Brasília, fuso -03:00) por grupo e rodada.
-const MD1_DATE = {
-  A: "06-11", B: "06-12", C: "06-13", D: "06-12", E: "06-14", F: "06-14",
-  G: "06-15", H: "06-15", I: "06-16", J: "06-16", K: "06-17", L: "06-17"
+// --- Calendário REAL da fase de grupos (fixtures oficiais da Copa 2026) ------
+// Cada jogo = [mandante, visitante, "MM-DD"]. Ordem: R1, R1, R2, R2, R3, R3.
+// Pesquisado jogo a jogo (não é rotação automática) — cada grupo tem seu chaveamento.
+const GROUP_FIXTURES = {
+  A: [["MEX","RSA","06-11"],["KOR","CZE","06-11"],["MEX","KOR","06-18"],["CZE","RSA","06-18"],["RSA","KOR","06-24"],["CZE","MEX","06-24"]],
+  B: [["CAN","BIH","06-12"],["QAT","SUI","06-13"],["CAN","QAT","06-18"],["SUI","BIH","06-18"],["SUI","CAN","06-24"],["BIH","QAT","06-24"]],
+  C: [["BRA","MAR","06-13"],["SCO","HAI","06-13"],["BRA","HAI","06-19"],["SCO","MAR","06-19"],["SCO","BRA","06-24"],["MAR","HAI","06-24"]],
+  D: [["USA","PAR","06-12"],["AUS","TUR","06-14"],["USA","AUS","06-19"],["TUR","PAR","06-19"],["PAR","AUS","06-25"],["TUR","USA","06-25"]],
+  E: [["GER","CUW","06-14"],["CIV","ECU","06-14"],["GER","CIV","06-20"],["ECU","CUW","06-20"],["ECU","GER","06-25"],["CUW","CIV","06-25"]],
+  F: [["NED","JPN","06-14"],["SWE","TUN","06-14"],["NED","SWE","06-20"],["TUN","JPN","06-20"],["JPN","SWE","06-25"],["TUN","NED","06-25"]],
+  G: [["BEL","EGY","06-15"],["IRN","NZL","06-15"],["BEL","IRN","06-21"],["NZL","EGY","06-21"],["EGY","IRN","06-26"],["NZL","BEL","06-26"]],
+  H: [["ESP","CPV","06-15"],["KSA","URU","06-15"],["ESP","KSA","06-21"],["URU","CPV","06-21"],["CPV","KSA","06-26"],["URU","ESP","06-26"]],
+  I: [["FRA","SEN","06-16"],["IRQ","NOR","06-16"],["FRA","IRQ","06-22"],["NOR","SEN","06-22"],["NOR","FRA","06-26"],["SEN","IRQ","06-26"]],
+  J: [["ARG","ALG","06-16"],["AUT","JOR","06-17"],["ARG","AUT","06-22"],["JOR","ALG","06-22"],["JOR","ARG","06-27"],["ALG","AUT","06-27"]],
+  K: [["POR","COD","06-17"],["UZB","COL","06-17"],["POR","UZB","06-23"],["COL","COD","06-23"],["COL","POR","06-27"],["COD","UZB","06-27"]],
+  L: [["ENG","CRO","06-17"],["GHA","PAN","06-17"],["ENG","GHA","06-23"],["PAN","CRO","06-23"],["CRO","GHA","06-27"],["PAN","ENG","06-27"]]
 };
 const MD_TIMES = ["13:00", "16:00", "19:00", "22:00"];
-
-function groupBlock(letter) {
-  // bloco de 0..3 conforme a ordem das letras, para escalonar MD2/MD3
-  return Math.floor("ABCDEFGHIJKL".indexOf(letter) / 3);
-}
-function md2Date(letter) { return `06-${18 + groupBlock(letter)}`; }
-function md3Date(letter) { return `06-${24 + groupBlock(letter)}`; }
 
 let cityIdx = 0;
 function nextCity() { return CITIES[(cityIdx++) % CITIES.length]; }
 
 // --- Geração do calendário da fase de grupos --------------------------------
 const groupMatches = [];
-for (const letter of Object.keys(GROUPS)) {
-  const teams = GROUPS[letter];
-  for (const md of [1, 2, 3]) {
-    const date =
-      md === 1 ? MD1_DATE[letter] : md === 2 ? md2Date(letter) : md3Date(letter);
-    ROUND_PAIRS[md].forEach((pair, i) => {
-      groupMatches.push({
-        id: `${letter}-MD${md}-${i + 1}`,
-        fase: "grupos",
-        grupo: letter,
-        rodada: md,
-        home: teams[pair[0]],
-        away: teams[pair[1]],
-        kickoff: `2026-${date}T${MD_TIMES[(i + md) % MD_TIMES.length]}:00-03:00`,
-        cidade: nextCity()
-      });
+for (const letter of Object.keys(GROUP_FIXTURES)) {
+  GROUP_FIXTURES[letter].forEach((fx, idx) => {
+    const md = Math.floor(idx / 2) + 1;     // 1, 2 ou 3
+    const i = (idx % 2) + 1;                // 1º ou 2º jogo da rodada
+    groupMatches.push({
+      id: `${letter}-MD${md}-${i}`,
+      fase: "grupos",
+      grupo: letter,
+      rodada: md,
+      home: fx[0],
+      away: fx[1],
+      kickoff: `2026-${fx[2]}T${MD_TIMES[(idx + 1) % MD_TIMES.length]}:00-03:00`,
+      cidade: nextCity()
     });
-  }
+  });
 }
 
 // --- Mata-mata (chaveamento, seleções a definir conforme classificação) -----

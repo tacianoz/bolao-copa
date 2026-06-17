@@ -30,7 +30,9 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 h2, h3, h4 { font-family: "Fredoka", "Inter", sans-serif; letter-spacing: .2px; }
-.brand h1, .brand-seal, .auth-head h1, .rb, .rk-pts { font-family: "Bangers", "Fredoka", sans-serif; letter-spacing: 1px; }
+.brand h1, .brand-seal, .auth-head h1 { font-family: "Bangers", "Fredoka", sans-serif; letter-spacing: 1px; }
+/* números (pontos, valores) em fonte legível — Bangers confunde 1 e 7 */
+.rb, .rk-pts { font-family: "Fredoka", sans-serif; font-weight: 700; }
 button { font-family: inherit; cursor: pointer; }
 input, button { font-size: 1rem; }
 
@@ -257,13 +259,13 @@ details[open] > summary.dia .dia-chev { transform: rotate(90deg); }
 .pote-top span { font-size: .7rem; text-transform: uppercase; letter-spacing: .5px; opacity: .8; display: block; }
 .pote-top b { font-size: 1.5rem; color: var(--amarelo); }
 .pote-big { grid-column: 1 / -1; text-align: center; background: rgba(201,162,39,.18) !important; border: 1px dashed var(--ouro); }
-.pote-big b { font-size: 2.4rem; font-family: "Bangers", sans-serif; letter-spacing: 1px; }
+.pote-big b { font-size: 2.4rem; font-family: "Fredoka", sans-serif; font-weight: 700; letter-spacing: .5px; }
 .premios { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
 .premio { background: #fff; border: var(--borda); border-radius: 14px; padding: 18px; text-align: center; box-shadow: 0 4px 14px rgba(7,33,24,.05); }
 .premio.ouro { border: 2px solid var(--ouro); background: linear-gradient(160deg, #fff, #fbf4dc); transform: scale(1.03); }
 .premio-emoji { font-size: 38px; }
 .premio-pos { font-weight: 700; color: var(--verde); margin-top: 4px; } .premio-pos small { color: var(--cinza); font-weight: 500; }
-.premio-valor { font-family: "Bangers", sans-serif; font-size: 1.9rem; color: var(--ouro); letter-spacing: .5px; margin: 4px 0; }
+.premio-valor { font-family: "Fredoka", sans-serif; font-weight: 700; font-size: 1.8rem; color: var(--ouro); margin: 4px 0; }
 .premio-quem { font-size: .78rem; color: var(--cinza); }
 .lanterna { background: #fff7e0; border: 1px solid var(--amarelo); border-radius: 12px; padding: 13px 16px; font-size: .86rem; color: #6a4e00; }
 .disclaimer { font-size: .78rem; color: var(--cinza); text-align: center; padding: 4px 10px; }
