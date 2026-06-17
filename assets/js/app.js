@@ -362,7 +362,7 @@ function schedulePickSave(matchId, card) {
   saveTimer = setTimeout(async () => {
     try {
       await store.savePicks(state.picks);
-      toast("Palpite salvo, brabo! ✍️");
+      toast("Palpite salvo! ✍️");
       card.classList.remove("touched"); card.classList.add("flash");
       setTimeout(() => card.classList.remove("flash"), 600);
     } catch (e) { toast("Deu ruim ao salvar 😬", true); }
