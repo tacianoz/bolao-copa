@@ -406,7 +406,7 @@ function tabelaGrupo(letter) {
 // ============================================================================
 function viewRanking() {
   const v = el(`<section class="view"></section>`);
-  v.appendChild(el(`<div class="hero"><div class="hero-l"><h2>Ranking dos Brabo 🏆</h2><p>Os monstro que mais cravam placar. Cadê tu nessa lista, hein? 👀</p></div></div>`));
+  v.appendChild(el(`<div class="hero"><div class="hero-l"><h2>Ranking das Braba e dos Brabo 🏆</h2><p>As monstra e os monstro que mais cravam placar. Cadê tu nessa lista, hein? 👀</p></div></div>`));
   const list = el(`<div class="rank-list"><p class="vazio">Juntando a galera…</p></div>`);
   v.appendChild(list);
 
