@@ -26,10 +26,14 @@ async function boot() {
   await store.init();
   store.onAuth(async (user) => {
     if (user) {
-      state.picks = await store.getMyPicks();
-      state.results = await store.getResults();
+      try { state.picks = await store.getMyPicks(); } catch { state.picks = {}; }
+      try { state.results = await store.getResults(); } catch { /* mantém */ }
     }
     render();
+    if (user && store.profileError) {
+      toast("Entrou, mas o Firestore recusou ler seus dados. Publique as regras! ⚠️", true);
+      store.profileError = null;
+    }
   });
 }
 

@@ -121,9 +121,16 @@ export const store = {
   },
 
   async _fbLoadProfile(uid) {
-    const { doc, getDoc, db } = this._fb;
-    const snap = await getDoc(doc(db, "predictions", uid));
-    return snap.exists() ? snap.data() : {};
+    // Resiliente: se a leitura falhar (regras/rede), não trava o login.
+    try {
+      const { doc, getDoc, db } = this._fb;
+      const snap = await getDoc(doc(db, "predictions", uid));
+      return snap.exists() ? snap.data() : {};
+    } catch (e) {
+      console.warn("Não consegui ler o perfil (verifique as regras do Firestore):", e);
+      this.profileError = e;
+      return {};
+    }
   },
 
   // --- Auth (Firebase) ------------------------------------------------------
@@ -151,8 +158,13 @@ export const store = {
 
   // --- Palpites (Firebase) --------------------------------------------------
   async _fbGetPicks(uid) {
-    const snap = await this._fb.getDoc(this._fb.doc(this._fb.db, "predictions", uid));
-    return snap.exists() ? (snap.data().picks || {}) : {};
+    try {
+      const snap = await this._fb.getDoc(this._fb.doc(this._fb.db, "predictions", uid));
+      return snap.exists() ? (snap.data().picks || {}) : {};
+    } catch (e) {
+      console.warn("Não consegui ler os palpites:", e);
+      return {};
+    }
   },
   async _fbSavePicks(picks) {
     const f = this._fb;
