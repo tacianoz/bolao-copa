@@ -145,7 +145,16 @@ input:focus { outline: none; border-color: var(--ouro); box-shadow: 0 0 0 3px rg
 .grupo-tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 4px; }
 .gtab { border: var(--borda); background: #fff; padding: 7px 12px; border-radius: 9px; font-weight: 600; font-size: .82rem; color: var(--verde-2); }
 .gtab.active { background: var(--ouro); color: var(--verde); border-color: var(--ouro); }
-.dia { color: var(--verde); font-size: 1.05rem; margin-top: 10px; text-transform: capitalize; }
+.day-group { display: grid; gap: 9px; margin-top: 6px; }
+.dia { color: var(--verde); font-size: 1.05rem; text-transform: capitalize; }
+summary.dia {
+  cursor: pointer; display: flex; align-items: center; gap: 8px;
+  list-style: none; user-select: none; padding: 8px 2px;
+}
+summary.dia::-webkit-details-marker { display: none; }
+summary.dia::before { content: "▸"; color: var(--ouro); font-size: .85em; transition: transform .15s; }
+details[open] > summary.dia::before { transform: rotate(90deg); }
+.dia-tag { font-size: .72rem; color: var(--cinza); font-weight: 500; text-transform: none; }
 .vazio { color: var(--cinza); text-align: center; padding: 30px; }
 
 /* ===========================================================================

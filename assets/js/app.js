@@ -14,6 +14,8 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
 const fmtFusoOpts = { timeZone: APP.fusoHorario, day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" };
 const fmtDia = (iso) => new Date(iso).toLocaleDateString("pt-BR", { timeZone: APP.fusoHorario, weekday: "long", day: "2-digit", month: "long" });
 const fmtHora = (iso) => new Date(iso).toLocaleTimeString("pt-BR", { timeZone: APP.fusoHorario, hour: "2-digit", minute: "2-digit" });
+const dayKey = (iso) => new Date(iso).toLocaleDateString("en-CA", { timeZone: APP.fusoHorario }); // YYYY-MM-DD
+const todayKey = () => new Date().toLocaleDateString("en-CA", { timeZone: APP.fusoHorario });
 const team = (code) => code ? TEAMS[code] : null;
 
 const state = { picks: {}, results: {}, route: "jogos", faseFiltro: "grupos", saving: false };
@@ -275,13 +277,26 @@ function grupoTabs(jogos, container) {
 }
 
 function renderDias(container, jogos) {
-  let lastDay = "";
-  for (const m of jogos) {
-    const d = fmtDia(m.kickoff);
-    if (d !== lastDay) { container.appendChild(el(`<h3 class="dia">📆 ${d}</h3>`)); lastDay = d; }
-    container.appendChild(matchCard(m));
+  if (!jogos.length) {
+    container.appendChild(el(`<p class="vazio">Nada por aqui ainda. Calma que a treta tá chegando. 🍿</p>`));
+    return;
   }
-  if (!jogos.length) container.appendChild(el(`<p class="vazio">Nada por aqui ainda. Calma que a treta tá chegando. 🍿</p>`));
+  // agrupa por dia mantendo a ordem cronológica
+  const groups = [];
+  let cur = null;
+  for (const m of jogos) {
+    const k = dayKey(m.kickoff);
+    if (!cur || cur.k !== k) { cur = { k, label: fmtDia(m.kickoff), matches: [] }; groups.push(cur); }
+    cur.matches.push(m);
+  }
+  const hoje = todayKey();
+  for (const g of groups) {
+    const passado = g.k < hoje; // dia já terminou -> colapsa
+    const det = el(`<details class="day-group"${passado ? "" : " open"}></details>`);
+    det.appendChild(el(`<summary class="dia">📆 ${g.label}${passado ? ` <span class="dia-tag">${g.matches.length} jogo${g.matches.length > 1 ? "s" : ""} · toca pra ver</span>` : ""}</summary>`));
+    g.matches.forEach((m) => det.appendChild(matchCard(m)));
+    container.appendChild(det);
+  }
 }
 
 function matchCard(m) {
