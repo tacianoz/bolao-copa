@@ -141,7 +141,7 @@ export const store = {
       signOut: authMod.signOut,
       updateProfile: authMod.updateProfile,
       doc: dbMod.doc, getDoc: dbMod.getDoc, setDoc: dbMod.setDoc, deleteDoc: dbMod.deleteDoc,
-      collection: dbMod.collection, getDocs: dbMod.getDocs
+      updateDoc: dbMod.updateDoc, collection: dbMod.collection, getDocs: dbMod.getDocs
     };
 
     return new Promise((resolve) => {
@@ -214,10 +214,13 @@ export const store = {
   },
   async _fbSavePicks(picks) {
     const f = this._fb;
-    await f.setDoc(f.doc(f.db, "predictions", this.user.uid),
-      { picks, fxv: FXV, displayName: this.user.displayName, posto: this.user.posto,
-        avatar: this.user.avatar, email: this.user.email, updatedAt: Date.now() },
-      { merge: true });
+    const ref = f.doc(f.db, "predictions", this.user.uid);
+    const data = { picks, fxv: FXV, displayName: this.user.displayName, posto: this.user.posto,
+      avatar: this.user.avatar, email: this.user.email, updatedAt: Date.now() };
+    // updateDoc SUBSTITUI o mapa "picks" (remoções funcionam). setDoc/merge
+    // mesclaria e nunca apagaria um palpite. Fallback cria o doc se não existir.
+    try { await f.updateDoc(ref, data); }
+    catch (e) { await f.setDoc(ref, data, { merge: true }); }
   },
   async _fbAllPlayers() {
     const f = this._fb;
