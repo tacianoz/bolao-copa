@@ -191,6 +191,7 @@ input:focus { outline: none; border-color: var(--ouro); box-shadow: 0 0 0 3px rg
 /* ===========================================================================
    TABELA DE GRUPO
    =========================================================================== */
+.tabela-wrap { display: grid; gap: 6px; }
 .tabela { width: 100%; border-collapse: collapse; background: #fff; border-radius: var(--r); overflow: hidden; box-shadow: 0 6px 18px rgba(7,33,24,.06); border: var(--borda); }
 .tabela th, .tabela td { padding: 9px 8px; text-align: center; font-size: .82rem; }
 .tabela th { background: var(--verde); color: #fff; font-weight: 600; }

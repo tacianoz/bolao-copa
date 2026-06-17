@@ -354,6 +354,7 @@ function tabelaGrupo(letter) {
   const rows = Object.values(tbl).sort((x, y) =>
     y.P - x.P || (y.GP - y.GC) - (x.GP - x.GC) || y.GP - x.GP);
   return el(`
+    <div class="tabela-wrap">
     <table class="tabela">
       <thead><tr><th>#</th><th>Seleção</th><th>P</th><th>J</th><th>V</th><th>E</th><th>D</th><th>SG</th></tr></thead>
       <tbody>
@@ -366,7 +367,8 @@ function tabelaGrupo(letter) {
           </tr>`).join("")}
       </tbody>
     </table>
-    <p class="legenda"><span class="dot qualif"></span> classificados (brabos) &nbsp; <span class="dot repesca"></span> 3º (vai na fé) 🙏</p>`);
+    <p class="legenda"><span class="dot qualif"></span> classificados (brabos) &nbsp; <span class="dot repesca"></span> 3º (vai na fé) 🙏</p>
+    </div>`);
 }
 
 // ============================================================================
@@ -462,14 +464,15 @@ function viewBolada() {
 function viewRegras() {
   const P = APP.pontuacao;
   const v = el(`<section class="view"></section>`);
+  v.appendChild(el(`<div class="hero"><div class="hero-l"><h2>As Regra da Zoeira 📜</h2><p>Tá tudo aqui, sem rolo. Lê com atenção pra não vir chorar depois. 😏</p></div></div>`));
   v.appendChild(el(`
-    <div class="hero"><div class="hero-l"><h2>As Regra da Zoeira 📜</h2><p>Tá tudo aqui, sem rolo. Lê com atenção pra não vir chorar depois. 😏</p></div></div>
     <div class="cards">
       <div class="rule"><span class="rb">${P.placarExato}</span><div><h4>🎯 Cravou o placar</h4><p>Acertou o placar na mosca. Tu é brabo demais. 🐐</p></div></div>
       <div class="rule"><span class="rb">${P.saldoVencedor}</span><div><h4>Vencedor + saldo</h4><p>Acertou quem ganhou (ou o empate) e o saldo de gols. Quase lá! 😎</p></div></div>
       <div class="rule"><span class="rb">${P.vencedor}</span><div><h4>Só o vencedor</h4><p>Acertou só quem levou a melhor (ou o empate). Tá valendo. 👍</p></div></div>
       <div class="rule"><span class="rb">${P.golsTime}</span><div><h4>Migé (parcial)</h4><p>Errou o resultado, mas acertou os gols de um dos times. Migué conta. 🤏</p></div></div>
-    </div>
+    </div>`));
+  v.appendChild(el(`
     <div class="info">
       <h4>🔒 Fechou, fechou</h4>
       <p>Pode mudar teu palpite o quanto quiser até o <b>juiz apitar</b> (horário de Brasília). Depois que a bola rola, acabou — não chora.</p>
