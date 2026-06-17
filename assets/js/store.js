@@ -27,8 +27,15 @@ export const store = {
   async init() {
     await this._loadResultsFile();
     if (this.isConfigured()) {
-      try { await this._initFirebase(); this.mode = "firebase"; return; }
-      catch (e) { console.warn("Firebase indisponível, usando modo local:", e); }
+      try {
+        // Rede de segurança: o boot nunca fica preso esperando o Firebase.
+        await Promise.race([
+          this._initFirebase(),
+          new Promise((res) => setTimeout(res, 10000))
+        ]);
+        this.mode = "firebase";
+        return;
+      } catch (e) { console.warn("Firebase indisponível, usando modo local:", e); }
     }
     this.mode = "local";
     this._initLocal();
@@ -106,14 +113,20 @@ export const store = {
 
     return new Promise((resolve) => {
       authMod.onAuthStateChanged(auth, async (u) => {
-        if (u) {
-          const profile = await this._fbLoadProfile(u.uid);
-          this.user = {
-            uid: u.uid, email: u.email, emailVerified: u.emailVerified,
-            displayName: profile.displayName || u.displayName || u.email.split("@")[0],
-            posto: profile.posto || "", avatar: profile.avatar || "🎩"
-          };
-        } else this.user = null;
+        try {
+          if (u) {
+            const profile = await this._fbLoadProfile(u.uid);
+            this.user = {
+              uid: u.uid, email: u.email, emailVerified: u.emailVerified,
+              displayName: profile.displayName || u.displayName || u.email.split("@")[0],
+              posto: profile.posto || "", avatar: profile.avatar || "🎩"
+            };
+          } else this.user = null;
+        } catch (e) {
+          console.warn("Erro ao montar a sessão:", e);
+          this.user = u ? { uid: u.uid, email: u.email, emailVerified: u.emailVerified,
+            displayName: (u.email || "").split("@")[0], posto: "", avatar: "🎩" } : null;
+        }
         this._emit();
         resolve();
       });
