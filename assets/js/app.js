@@ -250,15 +250,23 @@ function viewJogos() {
 function grupoTabs(jogos, container) {
   const wrap = el(`<div></div>`);
   const tabs = el(`<div class="grupo-tabs"></div>`);
-  if (!state.grupoSel) state.grupoSel = "C"; // Brasil 🇧🇷
+  if (!state.grupoSel) state.grupoSel = "ALL"; // visão cronológica por padrão
+  const todos = el(`<button class="gtab ${state.grupoSel === "ALL" ? "active" : ""}">📅 Todos</button>`);
+  todos.addEventListener("click", () => { state.grupoSel = "ALL"; render(); });
+  tabs.appendChild(todos);
   Object.keys(GROUPS).forEach((g) => {
     const b = el(`<button class="gtab ${g === state.grupoSel ? "active" : ""}">Grupo ${g}</button>`);
     b.addEventListener("click", () => { state.grupoSel = g; render(); });
     tabs.appendChild(b);
   });
   wrap.appendChild(tabs);
-  wrap.appendChild(tabelaGrupo(state.grupoSel));
-  renderDias(wrap, jogos.filter((m) => m.grupo === state.grupoSel));
+  if (state.grupoSel === "ALL") {
+    // todos os grupos juntos, em ordem cronológica (jogos já vêm ordenados)
+    renderDias(wrap, jogos);
+  } else {
+    wrap.appendChild(tabelaGrupo(state.grupoSel));
+    renderDias(wrap, jogos.filter((m) => m.grupo === state.grupoSel));
+  }
   return wrap;
 }
 
