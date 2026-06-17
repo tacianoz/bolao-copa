@@ -82,24 +82,25 @@ const CITIES = [
 ];
 
 // --- Calendário REAL da fase de grupos (fixtures oficiais da Copa 2026) ------
-// Cada jogo = [mandante, visitante, "MM-DD"]. Ordem: R1, R1, R2, R2, R3, R3.
-// Pesquisado jogo a jogo (não é rotação automática) — cada grupo tem seu chaveamento.
+// Cada jogo = [mandante, visitante, "MM-DD", "HH:MM"] em HORÁRIO DE BRASÍLIA.
+// Pesquisado jogo a jogo (confrontos + horários, convertidos de ET para -03:00).
+// Obs.: alguns jogos noturnos no Pacífico/México caem na madrugada de Brasília.
 const GROUP_FIXTURES = {
-  A: [["MEX","RSA","06-11"],["KOR","CZE","06-11"],["MEX","KOR","06-18"],["CZE","RSA","06-18"],["RSA","KOR","06-24"],["CZE","MEX","06-24"]],
-  B: [["CAN","BIH","06-12"],["QAT","SUI","06-13"],["CAN","QAT","06-18"],["SUI","BIH","06-18"],["SUI","CAN","06-24"],["BIH","QAT","06-24"]],
-  C: [["BRA","MAR","06-13"],["SCO","HAI","06-13"],["BRA","HAI","06-19"],["SCO","MAR","06-19"],["SCO","BRA","06-24"],["MAR","HAI","06-24"]],
-  D: [["USA","PAR","06-12"],["AUS","TUR","06-14"],["USA","AUS","06-19"],["TUR","PAR","06-19"],["PAR","AUS","06-25"],["TUR","USA","06-25"]],
-  E: [["GER","CUW","06-14"],["CIV","ECU","06-14"],["GER","CIV","06-20"],["ECU","CUW","06-20"],["ECU","GER","06-25"],["CUW","CIV","06-25"]],
-  F: [["NED","JPN","06-14"],["SWE","TUN","06-14"],["NED","SWE","06-20"],["TUN","JPN","06-20"],["JPN","SWE","06-25"],["TUN","NED","06-25"]],
-  G: [["BEL","EGY","06-15"],["IRN","NZL","06-15"],["BEL","IRN","06-21"],["NZL","EGY","06-21"],["EGY","IRN","06-26"],["NZL","BEL","06-26"]],
-  H: [["ESP","CPV","06-15"],["KSA","URU","06-15"],["ESP","KSA","06-21"],["URU","CPV","06-21"],["CPV","KSA","06-26"],["URU","ESP","06-26"]],
-  I: [["FRA","SEN","06-16"],["IRQ","NOR","06-16"],["FRA","IRQ","06-22"],["NOR","SEN","06-22"],["NOR","FRA","06-26"],["SEN","IRQ","06-26"]],
-  J: [["ARG","ALG","06-16"],["AUT","JOR","06-17"],["ARG","AUT","06-22"],["JOR","ALG","06-22"],["JOR","ARG","06-27"],["ALG","AUT","06-27"]],
-  K: [["POR","COD","06-17"],["UZB","COL","06-17"],["POR","UZB","06-23"],["COL","COD","06-23"],["COL","POR","06-27"],["COD","UZB","06-27"]],
-  L: [["ENG","CRO","06-17"],["GHA","PAN","06-17"],["ENG","GHA","06-23"],["PAN","CRO","06-23"],["CRO","GHA","06-27"],["PAN","ENG","06-27"]]
+  A: [["MEX","RSA","06-11","16:00"],["KOR","CZE","06-11","23:00"],["MEX","KOR","06-18","22:00"],["CZE","RSA","06-18","13:00"],["RSA","KOR","06-24","22:00"],["CZE","MEX","06-24","22:00"]],
+  B: [["CAN","BIH","06-12","19:00"],["QAT","SUI","06-13","16:00"],["CAN","QAT","06-18","19:00"],["SUI","BIH","06-18","16:00"],["SUI","CAN","06-24","19:00"],["BIH","QAT","06-24","19:00"]],
+  C: [["BRA","MAR","06-13","19:00"],["SCO","HAI","06-13","22:00"],["BRA","HAI","06-19","21:30"],["SCO","MAR","06-19","19:00"],["SCO","BRA","06-24","19:00"],["MAR","HAI","06-24","19:00"]],
+  D: [["USA","PAR","06-12","22:00"],["AUS","TUR","06-14","01:00"],["USA","AUS","06-19","16:00"],["TUR","PAR","06-20","01:00"],["PAR","AUS","06-25","23:00"],["TUR","USA","06-25","23:00"]],
+  E: [["GER","CUW","06-14","14:00"],["CIV","ECU","06-14","20:00"],["GER","CIV","06-20","17:00"],["ECU","CUW","06-20","21:00"],["ECU","GER","06-25","17:00"],["CUW","CIV","06-25","17:00"]],
+  F: [["NED","JPN","06-14","17:00"],["SWE","TUN","06-14","23:00"],["NED","SWE","06-20","14:00"],["TUN","JPN","06-21","01:00"],["JPN","SWE","06-25","20:00"],["TUN","NED","06-25","20:00"]],
+  G: [["BEL","EGY","06-15","16:00"],["IRN","NZL","06-15","22:00"],["BEL","IRN","06-21","16:00"],["NZL","EGY","06-21","22:00"],["EGY","IRN","06-27","00:00"],["NZL","BEL","06-27","00:00"]],
+  H: [["ESP","CPV","06-15","13:00"],["KSA","URU","06-15","19:00"],["ESP","KSA","06-21","13:00"],["URU","CPV","06-21","19:00"],["CPV","KSA","06-26","21:00"],["URU","ESP","06-26","21:00"]],
+  I: [["FRA","SEN","06-16","16:00"],["IRQ","NOR","06-16","19:00"],["FRA","IRQ","06-22","18:00"],["NOR","SEN","06-22","21:00"],["NOR","FRA","06-26","16:00"],["SEN","IRQ","06-26","16:00"]],
+  J: [["ARG","ALG","06-16","22:00"],["AUT","JOR","06-17","01:00"],["ARG","AUT","06-22","14:00"],["JOR","ALG","06-23","00:00"],["JOR","ARG","06-27","23:00"],["ALG","AUT","06-27","23:00"]],
+  K: [["POR","COD","06-17","14:00"],["UZB","COL","06-17","23:00"],["POR","UZB","06-23","14:00"],["COL","COD","06-23","23:00"],["COL","POR","06-27","20:30"],["COD","UZB","06-27","20:30"]],
+  L: [["ENG","CRO","06-17","17:00"],["GHA","PAN","06-17","20:00"],["ENG","GHA","06-23","17:00"],["PAN","CRO","06-23","20:00"],["CRO","GHA","06-27","18:00"],["PAN","ENG","06-27","18:00"]]
 };
-const MD_TIMES = ["13:00", "16:00", "19:00", "22:00"];
 
+const MD_TIMES = ["14:00", "17:00", "20:00", "23:00"]; // horários genéricos do mata-mata
 let cityIdx = 0;
 function nextCity() { return CITIES[(cityIdx++) % CITIES.length]; }
 
@@ -116,7 +117,7 @@ for (const letter of Object.keys(GROUP_FIXTURES)) {
       rodada: md,
       home: fx[0],
       away: fx[1],
-      kickoff: `2026-${fx[2]}T${MD_TIMES[(idx + 1) % MD_TIMES.length]}:00-03:00`,
+      kickoff: `2026-${fx[2]}T${fx[3]}:00-03:00`,
       cidade: nextCity()
     });
   });
