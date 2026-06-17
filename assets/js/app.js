@@ -293,7 +293,8 @@ function renderDias(container, jogos) {
   for (const g of groups) {
     const passado = g.k < hoje; // dia já terminou -> colapsa
     const det = el(`<details class="day-group"${passado ? "" : " open"}></details>`);
-    det.appendChild(el(`<summary class="dia">📆 ${g.label}${passado ? ` <span class="dia-tag">${g.matches.length} jogo${g.matches.length > 1 ? "s" : ""} · toca pra ver</span>` : ""}</summary>`));
+    const n = g.matches.length;
+    det.appendChild(el(`<summary class="dia"><span class="dia-chev">▸</span><span class="dia-cal">📆</span><span class="dia-label">${g.label}</span><span class="dia-tag">${n} jogo${n > 1 ? "s" : ""}${passado ? " · toca pra ver" : ""}</span></summary>`));
     g.matches.forEach((m) => det.appendChild(matchCard(m)));
     container.appendChild(det);
   }
