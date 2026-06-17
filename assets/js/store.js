@@ -4,7 +4,40 @@
 //  funciona em MODO LOCAL (localStorage) para demonstração.
 // ============================================================================
 import { FIREBASE_CONFIG, APP } from "./config.js";
-import { DEFAULT_RESULTS, MATCHES } from "./data.js";
+import { DEFAULT_RESULTS, MATCHES, GROUPS } from "./data.js";
+
+// ----------------------------------------------------------------------------
+//  MIGRAÇÃO DE PALPITES  —  quando o calendário muda, os palpites já feitos
+//  são transferidos para o jogo da DUPLA CERTA de seleções (ajustando o mando).
+// ----------------------------------------------------------------------------
+const FXV = 2; // versão atual do calendário (fixtures reais)
+// Esquema ANTIGO (rotação automática) que estava no ar antes da correção.
+const OLD_PAIRS = { 1: [[0, 1], [2, 3]], 2: [[0, 2], [3, 1]], 3: [[0, 3], [1, 2]] };
+function oldTeamsForId(id) {
+  const m = id.match(/^([A-L])-MD([123])-([12])$/);
+  if (!m) return null;
+  const pair = OLD_PAIRS[+m[2]][+m[3] - 1];
+  const t = GROUPS[m[1]];
+  return [t[pair[0]], t[pair[1]]];
+}
+function newSlotForPair(a, b) {
+  return MATCHES.find((mt) => mt.fase === "grupos" &&
+    ((mt.home === a && mt.away === b) || (mt.home === b && mt.away === a))) || null;
+}
+function migrateV2(picks) {
+  const out = {};
+  for (const [id, sc] of Object.entries(picks || {})) {
+    const old = oldTeamsForId(id);
+    if (!old) { out[id] = sc; continue; }          // mata-mata / id desconhecido
+    const slot = newSlotForPair(old[0], old[1]);
+    if (!slot) { out[id] = sc; continue; }
+    out[slot.id] = slot.home === old[0] ? sc : { h: sc.a, a: sc.h }; // ajusta mando
+  }
+  return out;
+}
+function applyMigrations(picks, fxv) {
+  return (fxv || 1) < FXV ? migrateV2(picks) : (picks || {});
+}
 
 const FB_VER = "10.12.2";
 const CDN = (m) => `https://www.gstatic.com/firebasejs/${FB_VER}/firebase-${m}.js`;
@@ -182,7 +215,7 @@ export const store = {
   async _fbSavePicks(picks) {
     const f = this._fb;
     await f.setDoc(f.doc(f.db, "predictions", this.user.uid),
-      { picks, displayName: this.user.displayName, posto: this.user.posto,
+      { picks, fxv: FXV, displayName: this.user.displayName, posto: this.user.posto,
         avatar: this.user.avatar, email: this.user.email, updatedAt: Date.now() },
       { merge: true });
   },
@@ -193,7 +226,7 @@ export const store = {
     snap.forEach((d) => {
       const x = d.data();
       out.push({ uid: d.id, displayName: x.displayName || x.email,
-        posto: x.posto || "", avatar: x.avatar || "🎩", picks: x.picks || {} });
+        posto: x.posto || "", avatar: x.avatar || "🎩", picks: x.picks || {}, fxv: x.fxv || 1 });
     });
     return out;
   },
@@ -259,10 +292,14 @@ export const store = {
     const u = Object.values(users).find((x) => x.uid === uid);
     return u ? (u.picks || {}) : {};
   },
+  _localUserMeta(uid) {
+    const u = Object.values(this._localUsers()).find((x) => x.uid === uid);
+    return { picks: (u && u.picks) || {}, fxv: (u && u.fxv) || 1 };
+  },
   _localSavePicks(picks) {
     const users = this._localUsers();
     const email = this.user.email.toLowerCase();
-    if (users[email]) { users[email].picks = picks; this._saveLocalUsers(users); }
+    if (users[email]) { users[email].picks = picks; users[email].fxv = FXV; this._saveLocalUsers(users); }
   },
   _localUpdateProfile(p) {
     Object.assign(this.user, p);
@@ -274,7 +311,7 @@ export const store = {
   _localAllPlayers() {
     return Object.values(this._localUsers()).map((u) => ({
       uid: u.uid, displayName: u.displayName, posto: u.posto,
-      avatar: u.avatar, email: u.email, picks: u.picks || {}
+      avatar: u.avatar, email: u.email, picks: u.picks || {}, fxv: u.fxv || 1
     }));
   },
   _localRemovePlayer(uid) {
@@ -295,13 +332,31 @@ export const store = {
     return this.mode === "firebase" ? this.login(email, password) : this._localLogin(email, password);
   },
   async getMyPicks() {
-    return this.mode === "firebase" ? this._fbGetPicks(this.user.uid) : this._localGetPicks(this.user.uid);
+    // Lê os palpites + a versão do calendário; se for antiga, migra e salva.
+    let picks = {}, fxv = 1;
+    if (this.mode === "firebase") {
+      try {
+        const snap = await this._fb.getDoc(this._fb.doc(this._fb.db, "predictions", this.user.uid));
+        if (snap.exists()) { const d = snap.data(); picks = d.picks || {}; fxv = d.fxv || 1; }
+      } catch (e) { console.warn("Não consegui ler os palpites:", e); return {}; }
+    } else {
+      const meta = this._localUserMeta(this.user.uid); picks = meta.picks; fxv = meta.fxv;
+    }
+    if ((fxv || 1) < FXV) {
+      const migrated = migrateV2(picks);
+      try { await this.savePicks(migrated); } catch (e) { console.warn("Falha ao salvar migração:", e); }
+      return migrated;
+    }
+    return picks;
   },
   async savePicks(picks) {
     return this.mode === "firebase" ? this._fbSavePicks(picks) : this._localSavePicks(picks);
   },
   async allPlayers() {
-    return this.mode === "firebase" ? this._fbAllPlayers() : this._localAllPlayers();
+    // Aplica a migração de calendário em memória (para o ranking ficar correto
+    // mesmo de quem ainda não logou desde a mudança).
+    const list = this.mode === "firebase" ? await this._fbAllPlayers() : this._localAllPlayers();
+    return list.map((p) => ({ ...p, picks: applyMigrations(p.picks, p.fxv) }));
   },
   async updateProfile(p) {
     return this.mode === "firebase" ? this._fbUpdateProfile(p) : this._localUpdateProfile(p);
