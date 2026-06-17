@@ -335,6 +335,7 @@ function matchCard(m) {
           : `<span class="opening">🟢 Bora chutar!</span>`}
         ${pts !== null ? `<span class="badge q-${q}">${q === "cravou" ? "🎯 CRAVOU, MONSTRO!" : q === "saldo" ? "Quase! 😎" : q === "vencedor" ? "Acertou o vencedor 👍" : q === "parcial" ? "Migué 🤏" : "Errou feio 💀"} · ${pts} pts</span>` : ""}
         ${store.isAdmin() ? `<button class="link adm" data-adm="${m.id}">⚙️ botar o placar</button>` : ""}
+        ${store.isAdmin() && state.picks[m.id] ? `<button class="link adm" data-clearpick="${m.id}">🗑️ tirar meu palpite</button>` : ""}
       </div>
     </article>`);
 
@@ -348,6 +349,13 @@ function matchCard(m) {
   });
   const adm = card.querySelector("[data-adm]");
   if (adm) adm.addEventListener("click", () => promptAdminResult(m));
+  const clr = card.querySelector("[data-clearpick]");
+  if (clr) clr.addEventListener("click", async () => {
+    if (!confirm("Tirar seu palpite deste jogo? O jogo já fechou, então não dá pra refazer.")) return;
+    delete state.picks[m.id];
+    try { await store.savePicks(state.picks); toast("Palpite removido ✔"); render(); }
+    catch (e) { toast("Deu ruim ao remover 😬", true); }
+  });
   return card;
 }
 
