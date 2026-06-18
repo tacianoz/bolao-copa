@@ -23,6 +23,7 @@ html, body { height: 100%; }
 body {
   font-family: "Inter", system-ui, sans-serif;
   color: var(--tinta);
+  overflow-x: hidden;
   background:
     radial-gradient(1200px 600px at 100% -10%, rgba(201,162,39,.10), transparent 60%),
     radial-gradient(900px 500px at -10% 10%, rgba(28,107,79,.12), transparent 55%),
@@ -123,8 +124,8 @@ input:focus { outline: none; border-color: var(--ouro); box-shadow: 0 0 0 3px rg
 /* ===========================================================================
    MAIN / VIEWS
    =========================================================================== */
-.main { flex: 1; width: min(960px, 100%); margin: 0 auto; padding: clamp(16px, 3vw, 30px); }
-.view { display: grid; gap: 16px; }
+.main { flex: 1; width: min(960px, 100%); max-width: 100%; margin: 0 auto; padding: clamp(16px, 3vw, 30px); min-width: 0; }
+.view { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; min-width: 0; }
 .hero {
   display: flex; justify-content: space-between; align-items: center; gap: 18px; flex-wrap: wrap;
   background: linear-gradient(120deg, #fff, var(--marfim-2));
@@ -153,7 +154,7 @@ input:focus { outline: none; border-color: var(--ouro); box-shadow: 0 0 0 3px rg
 .grupo-tabs::-webkit-scrollbar-thumb { background: rgba(11,61,46,.2); border-radius: 999px; }
 .gtab { flex: 0 0 auto; white-space: nowrap; border: var(--borda); background: #fff; padding: 7px 12px; border-radius: 9px; font-weight: 600; font-size: .82rem; color: var(--verde-2); }
 .gtab.active { background: var(--ouro); color: var(--verde); border-color: var(--ouro); }
-.day-group { display: grid; gap: 9px; margin-top: 4px; }
+.day-group { display: grid; grid-template-columns: minmax(0, 1fr); gap: 9px; margin-top: 4px; }
 summary.dia {
   cursor: pointer; display: flex; align-items: center; gap: 10px; list-style: none; user-select: none;
   background: #fff; border: var(--borda); border-radius: 12px; padding: 11px 15px;
@@ -191,7 +192,7 @@ details[open] > summary.dia .dia-chev { transform: rotate(90deg); }
 @keyframes flash { 0% { box-shadow: 0 0 0 0 rgba(46,139,87,.5); } 100% { box-shadow: 0 0 0 14px rgba(46,139,87,0); } }
 .match-meta { display: flex; justify-content: space-between; font-size: .72rem; color: var(--cinza); font-weight: 600; margin-bottom: 10px; }
 .fase-tag { background: var(--verde); color: #fff; padding: 1px 8px; border-radius: 999px; }
-.match-body { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 10px; }
+.match-body { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 10px; }
 .side { display: flex; align-items: center; gap: 9px; min-width: 0; }
 .side-h { justify-content: flex-end; text-align: right; }
 .side-a { justify-content: flex-start; }
@@ -354,7 +355,7 @@ details[open] > summary.dia .dia-chev { transform: rotate(90deg); }
   .chip { flex: 0 0 auto; }
 
   /* cartão de jogo: bandeira em cima, nome embaixo (centralizado) */
-  .match-body { grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: start; }
+  .match-body { grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 8px; align-items: start; }
   .side { flex-direction: column; gap: 5px; }
   .side-h, .side-a { justify-content: center; text-align: center; }
   .flag { font-size: 30px; }
