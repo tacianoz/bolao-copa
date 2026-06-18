@@ -324,17 +324,63 @@ details[open] > summary.dia .dia-chev { transform: rotate(90deg); }
 .toast.err { background: var(--vermelho); }
 
 /* ===========================================================================
-   RESPONSIVO
+   RESPONSIVO (mobile)
    =========================================================================== */
-@media (max-width: 640px) {
+@media (max-width: 760px) {
+  /* topbar empilha; navegação rola na horizontal */
+  .topbar { flex-direction: column; align-items: stretch; gap: 8px; padding: 10px 14px; }
+  .brand { justify-content: center; }
   .brand small { display: none; }
-  .nav button { padding: 8px 10px; font-size: .8rem; }
-  .nav-user b { display: none; }
+  .nav { flex-wrap: nowrap; overflow-x: auto; justify-content: flex-start; padding-bottom: 3px; -webkit-overflow-scrolling: touch; }
+  .nav::-webkit-scrollbar { height: 4px; }
+  .nav button { flex: 0 0 auto; padding: 8px 11px; font-size: .82rem; }
+
+  /* hero / estatísticas */
+  .hero { padding: 16px; }
+  .hero h2 { font-size: 1.3rem; }
+  .hero p { font-size: .85rem; }
+  .hero-stats { width: 100%; }
+  .hero-stats > div { flex: 1; min-width: 0; padding: 9px 6px; }
+  .hero-stats b { font-size: 1.05rem; }
+  .hero-stats span { font-size: .58rem; }
+}
+
+@media (max-width: 640px) {
+  .nav-user { max-width: 46vw; overflow: hidden; }
   .match-body { grid-template-columns: 1fr auto 1fr; gap: 6px; }
   .flag { font-size: 24px; } .tname { font-size: .82rem; }
   .sc { width: 40px; height: 40px; font-size: 1.15rem; }
-  .hero-stats { width: 100%; }
-  .rank-row { grid-template-columns: 36px 36px 1fr auto; }
+  .scoreboard { padding: 5px 7px; gap: 4px; }
+  .match-meta { font-size: .66rem; }
+  .match-foot { font-size: .74rem; gap: 7px; }
+
+  /* ranking */
+  .rank-row { grid-template-columns: 34px 34px 1fr auto; gap: 8px; padding: 10px 12px; }
   .rk-num { display: none; }
+  .rk-pts { font-size: 1.25rem; }
+
+  /* admin */
+  .admin-row { grid-template-columns: 36px 1fr auto; gap: 8px; padding: 10px 12px; }
+  .ar-stat { display: none; }
+  .ar-del { padding: 6px 9px; font-size: .74rem; }
+
+  /* bolada */
   .perfil-stats { grid-template-columns: repeat(2, 1fr); }
+  .pote-top b { font-size: 1.2rem; }
+  .pote-big b { font-size: 1.9rem; }
+  .premio.ouro { transform: none; }
+  .premio-valor { font-size: 1.6rem; }
+
+  /* tabela de grupo mais compacta */
+  .tabela th, .tabela td { padding: 7px 5px; font-size: .76rem; }
+
+  /* dias colapsáveis */
+  summary.dia { padding: 10px 12px; }
+  .dia-label { font-size: .92rem; }
+}
+
+@media (max-width: 380px) {
+  .sc { width: 36px; height: 36px; font-size: 1rem; }
+  .tname { font-size: .76rem; }
+  .hero-stats b { font-size: .95rem; }
 }

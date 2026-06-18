@@ -190,7 +190,11 @@ export const DEFAULT_RESULTS = {
   "I-MD1-1": { h: 3, a: 1 },  // França 3 x 1 Senegal
   "I-MD1-2": { h: 1, a: 4 },  // Iraque 1 x 4 Noruega
   "J-MD1-1": { h: 3, a: 0 },  // Argentina 3 x 0 Argélia
-  "J-MD1-2": { h: 3, a: 1 }   // Áustria 3 x 1 Jordânia
+  "J-MD1-2": { h: 3, a: 1 },  // Áustria 3 x 1 Jordânia
+  "K-MD1-1": { h: 1, a: 1 },  // Portugal 1 x 1 RD Congo
+  "K-MD1-2": { h: 1, a: 3 },  // Uzbequistão 1 x 3 Colômbia
+  "L-MD1-1": { h: 4, a: 2 },  // Inglaterra 4 x 2 Croácia
+  "L-MD1-2": { h: 1, a: 0 }   // Gana 1 x 0 Panamá
 };
 
 export const FASES = ["grupos", "32avos", "Oitavas", "Quartas", "Semifinal", "3º Lugar", "Final"];
