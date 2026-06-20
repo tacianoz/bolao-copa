@@ -194,7 +194,15 @@ export const DEFAULT_RESULTS = {
   "K-MD1-1": { h: 1, a: 1 },  // Portugal 1 x 1 RD Congo
   "K-MD1-2": { h: 1, a: 3 },  // Uzbequistão 1 x 3 Colômbia
   "L-MD1-1": { h: 4, a: 2 },  // Inglaterra 4 x 2 Croácia
-  "L-MD1-2": { h: 1, a: 0 }   // Gana 1 x 0 Panamá
+  "L-MD1-2": { h: 1, a: 0 },  // Gana 1 x 0 Panamá
+  "A-MD2-1": { h: 1, a: 0 },  // México 1 x 0 Coreia do Sul
+  "A-MD2-2": { h: 1, a: 1 },  // Tchéquia 1 x 1 África do Sul
+  "B-MD2-1": { h: 6, a: 0 },  // Canadá 6 x 0 Catar
+  "B-MD2-2": { h: 4, a: 1 },  // Suíça 4 x 1 Bósnia
+  "C-MD2-1": { h: 3, a: 0 },  // Brasil 3 x 0 Haiti
+  "C-MD2-2": { h: 0, a: 1 },  // Escócia 0 x 1 Marrocos
+  "D-MD2-1": { h: 2, a: 0 },  // EUA 2 x 0 Austrália
+  "D-MD2-2": { h: 0, a: 1 }   // Turquia 0 x 1 Paraguai
 };
 
 export const FASES = ["grupos", "32avos", "Oitavas", "Quartas", "Semifinal", "3º Lugar", "Final"];
