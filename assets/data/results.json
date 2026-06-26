@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-23T22:00:00-03:00",
+  "updatedAt": "2026-06-25T23:30:00-03:00",
   "results": {
     "A-MD1-1": { "h": 2, "a": 0 },
     "A-MD1-2": { "h": 2, "a": 1 },
@@ -48,7 +48,19 @@
     "K-MD2-1": { "h": 5, "a": 0 },
     "K-MD2-2": { "h": 1, "a": 0 },
     "L-MD2-1": { "h": 0, "a": 0 },
-    "L-MD2-2": { "h": 0, "a": 1 }
+    "L-MD2-2": { "h": 0, "a": 1 },
+    "A-MD3-1": { "h": 1, "a": 0 },
+    "A-MD3-2": { "h": 0, "a": 3 },
+    "B-MD3-1": { "h": 3, "a": 1 },
+    "B-MD3-2": { "h": 3, "a": 1 },
+    "C-MD3-1": { "h": 0, "a": 3 },
+    "C-MD3-2": { "h": 4, "a": 2 },
+    "D-MD3-1": { "h": 0, "a": 0 },
+    "D-MD3-2": { "h": 3, "a": 2 },
+    "E-MD3-1": { "h": 2, "a": 1 },
+    "E-MD3-2": { "h": 0, "a": 2 },
+    "F-MD3-1": { "h": 1, "a": 1 },
+    "F-MD3-2": { "h": 1, "a": 3 }
   },
   "fixtures": {},
   "_nota": "Placares atualizados aqui (fetch no-store, sem cache). O cron diário também escreve neste arquivo."
