@@ -1,10 +1,10 @@
 // ============================================================================
 //  TRETA DAS NAÇÕES · Bolão da Copa 2026  —  aplicação (interface + roteamento)
 // ============================================================================
-import { APP } from "./config.js?v=8";
-import { TEAMS, GROUPS, MATCHES, FASES } from "./data.js?v=8";
-import { store } from "./store.js?v=8";
-import { matchPoints, pointsFor, pickQuality, totalPoints } from "./scoring.js?v=8";
+import { APP } from "./config.js?v=9";
+import { TEAMS, GROUPS, MATCHES, FASES } from "./data.js?v=9";
+import { store } from "./store.js?v=9";
+import { matchPoints, pointsFor, pickQuality, totalPoints } from "./scoring.js?v=9";
 
 const AVATARS = ["🗿", "🤙", "🐐", "🥶", "👑", "🤡", "💀", "😎", "🔥", "🥸", "🤠", "👽"];
 const $ = (s, r = document) => r.querySelector(s);
@@ -433,9 +433,14 @@ function viewRanking() {
           <div class="rk-id">
             <b>${esc(p.displayName)}${me ? " <span class='tag-you'>você</span>" : ""}</b>
             <small>${esc(p.posto || "Em algum lugar do mundo 🌎")}</small>
+            <div class="rk-bd">
+              <span class="bd c" title="Placar cravado — 10 pts">🎯 ${p.cravadas}</span>
+              <span class="bd s" title="Vencedor + saldo de gols — 7 pts">7pt ×${p.saldos}</span>
+              <span class="bd v" title="Só o vencedor — 5 pts">5pt ×${p.vencedores}</span>
+              <span class="bd m" title="Migué (gols de um time) — 2 pts">2pt ×${p.migues}</span>
+              <span class="bd a">${p.acertos} acertos</span>
+            </div>
           </div>
-          <div class="rk-num"><b>${p.cravadas}</b><span>🎯</span></div>
-          <div class="rk-num"><b>${p.acertos}</b><span>acertos</span></div>
           <div class="rk-pts">${p.total}<span>pts</span></div>
         </div>`));
     });

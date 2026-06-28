@@ -1,8 +1,8 @@
 // ============================================================================
 //  SISTEMA DE PONTUAÇÃO
 // ============================================================================
-import { APP } from "./config.js?v=8";
-import { MATCHES } from "./data.js?v=8";
+import { APP } from "./config.js?v=9";
+import { MATCHES } from "./data.js?v=9";
 
 const P = APP.pontuacao;
 const sign = (n) => (n > 0 ? 1 : n < 0 ? -1 : 0);
@@ -50,7 +50,7 @@ export function pickQuality(pick, result) {
 
 // Total de pontos de um jogador (mapa matchId -> {h,a}) dado os resultados.
 export function totalPoints(picks, results) {
-  let total = 0, cravadas = 0, acertos = 0, jogados = 0;
+  let total = 0, cravadas = 0, saldos = 0, vencedores = 0, migues = 0, acertos = 0, jogados = 0;
   for (const m of MATCHES) {
     const r = results[m.id];
     if (!r) continue;
@@ -60,7 +60,11 @@ export function totalPoints(picks, results) {
     const pts = matchPoints(m, pick, r);
     total += pts;
     if (pts > 0) acertos++;
-    if (pointsFor(pick, r) >= P.placarExato) cravadas++;
+    const q = pickQuality(pick, r);
+    if (q === "cravou") cravadas++;
+    else if (q === "saldo") saldos++;
+    else if (q === "vencedor") vencedores++;
+    else if (q === "parcial") migues++;
   }
-  return { total, cravadas, acertos, jogados };
+  return { total, cravadas, saldos, vencedores, migues, acertos, jogados };
 }
