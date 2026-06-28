@@ -87,6 +87,8 @@ export const store = {
           if (fx[m.id]) {
             if (fx[m.id].home) m.home = fx[m.id].home;
             if (fx[m.id].away) m.away = fx[m.id].away;
+            if (fx[m.id].kickoff) m.kickoff = fx[m.id].kickoff;
+            if (fx[m.id].cidade) m.cidade = fx[m.id].cidade;
           }
         }
       }

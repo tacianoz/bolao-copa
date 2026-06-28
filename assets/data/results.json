@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-06-25T23:30:00-03:00",
+  "updatedAt": "2026-06-27T23:30:00-03:00",
   "results": {
     "A-MD1-1": { "h": 2, "a": 0 },
     "A-MD1-2": { "h": 2, "a": 1 },
@@ -60,8 +60,37 @@
     "E-MD3-1": { "h": 2, "a": 1 },
     "E-MD3-2": { "h": 0, "a": 2 },
     "F-MD3-1": { "h": 1, "a": 1 },
-    "F-MD3-2": { "h": 1, "a": 3 }
+    "F-MD3-2": { "h": 1, "a": 3 },
+    "G-MD3-1": { "h": 1, "a": 1 },
+    "G-MD3-2": { "h": 1, "a": 5 },
+    "H-MD3-1": { "h": 0, "a": 0 },
+    "H-MD3-2": { "h": 0, "a": 1 },
+    "I-MD3-1": { "h": 4, "a": 1 },
+    "I-MD3-2": { "h": 5, "a": 0 },
+    "J-MD3-1": { "h": 1, "a": 3 },
+    "J-MD3-2": { "h": 3, "a": 3 },
+    "K-MD3-1": { "h": 0, "a": 0 },
+    "K-MD3-2": { "h": 3, "a": 1 },
+    "L-MD3-1": { "h": 2, "a": 1 },
+    "L-MD3-2": { "h": 0, "a": 2 }
   },
-  "fixtures": {},
-  "_nota": "Placares atualizados aqui (fetch no-store, sem cache). O cron diário também escreve neste arquivo."
+  "fixtures": {
+    "R32-1":  { "home": "RSA", "away": "CAN", "kickoff": "2026-06-28T16:00:00-03:00", "cidade": "Los Angeles 🇺🇸" },
+    "R32-2":  { "home": "BRA", "away": "JPN", "kickoff": "2026-06-29T14:00:00-03:00", "cidade": "Houston 🇺🇸" },
+    "R32-3":  { "home": "GER", "away": "PAR", "kickoff": "2026-06-29T17:30:00-03:00", "cidade": "Boston 🇺🇸" },
+    "R32-4":  { "home": "NED", "away": "MAR", "kickoff": "2026-06-29T22:00:00-03:00", "cidade": "Monterrey 🇲🇽" },
+    "R32-5":  { "home": "CIV", "away": "NOR", "kickoff": "2026-06-30T14:00:00-03:00", "cidade": "Dallas 🇺🇸" },
+    "R32-6":  { "home": "FRA", "away": "SWE", "kickoff": "2026-06-30T18:00:00-03:00", "cidade": "Nova York / Nova Jersey 🇺🇸" },
+    "R32-7":  { "home": "MEX", "away": "ECU", "kickoff": "2026-06-30T22:00:00-03:00", "cidade": "Cidade do México 🇲🇽" },
+    "R32-8":  { "home": "ENG", "away": "COD", "kickoff": "2026-07-01T13:00:00-03:00", "cidade": "Atlanta 🇺🇸" },
+    "R32-9":  { "home": "BEL", "away": "SEN", "kickoff": "2026-07-01T17:00:00-03:00", "cidade": "Seattle 🇺🇸" },
+    "R32-10": { "home": "USA", "away": "BIH", "kickoff": "2026-07-01T21:00:00-03:00", "cidade": "São Francisco 🇺🇸" },
+    "R32-11": { "home": "ESP", "away": "AUT", "kickoff": "2026-07-02T16:00:00-03:00", "cidade": "Los Angeles 🇺🇸" },
+    "R32-12": { "home": "POR", "away": "CRO", "kickoff": "2026-07-02T20:00:00-03:00", "cidade": "Toronto 🇨🇦" },
+    "R32-13": { "home": "SUI", "away": "ALG", "kickoff": "2026-07-03T00:00:00-03:00", "cidade": "Vancouver 🇨🇦" },
+    "R32-14": { "home": "AUS", "away": "EGY", "kickoff": "2026-07-03T15:00:00-03:00", "cidade": "Dallas 🇺🇸" },
+    "R32-15": { "home": "ARG", "away": "CPV", "kickoff": "2026-07-03T19:00:00-03:00", "cidade": "Miami 🇺🇸" },
+    "R32-16": { "home": "COL", "away": "GHA", "kickoff": "2026-07-03T22:30:00-03:00", "cidade": "Kansas City 🇺🇸" }
+  },
+  "_nota": "Placares e confrontos do mata-mata (fetch no-store, sem cache). O cron diário também escreve aqui."
 }

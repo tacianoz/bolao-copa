@@ -144,7 +144,7 @@ const r32Labels = [
 ];
 for (let i = 0; i < 16; i++) {
   const day = 28 + Math.floor(i / 3); // 28/06 -> 03/07
-  knockoutMatches.push(ko(`R32-${i + 1}`, "32avos", `06-${day}`, MD_TIMES[i % 4], r32Labels[i]));
+  knockoutMatches.push(ko(`R32-${i + 1}`, "16avos", `06-${day}`, MD_TIMES[i % 4], r32Labels[i]));
 }
 // Oitavas (04 a 07/07) — 8 jogos
 for (let i = 0; i < 8; i++) {
@@ -213,4 +213,4 @@ export const DEFAULT_RESULTS = {
   "H-MD2-2": { h: 2, a: 2 }   // Uruguai 2 x 2 Cabo Verde
 };
 
-export const FASES = ["grupos", "32avos", "Oitavas", "Quartas", "Semifinal", "3º Lugar", "Final"];
+export const FASES = ["grupos", "16avos", "Oitavas", "Quartas", "Semifinal", "3º Lugar", "Final"];

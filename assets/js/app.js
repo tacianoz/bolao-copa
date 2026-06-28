@@ -646,7 +646,7 @@ async function promptAdminResult(m) {
 //  UTILIDADES DE INTERFACE
 // ============================================================================
 function faseNome(f) {
-  return { grupos: "Fase de Grupos", "32avos": "32 avos", Oitavas: "Oitavas", Quartas: "Quartas", Semifinal: "Semis", "3º Lugar": "3º Lugar", Final: "Final" }[f] || f;
+  return { grupos: "Fase de Grupos", "16avos": "16 avos", Oitavas: "Oitavas", Quartas: "Quartas", Semifinal: "Semis", "3º Lugar": "3º Lugar", Final: "Final" }[f] || f;
 }
 function nextDeadlineLabel() {
   const next = MATCHES.map((m) => new Date(m.kickoff).getTime()).filter((t) => t > Date.now()).sort((a, b) => a - b)[0];
