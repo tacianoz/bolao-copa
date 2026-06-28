@@ -3,8 +3,8 @@
 //  Usa Firebase (Auth + Firestore) quando configurado; caso contrário,
 //  funciona em MODO LOCAL (localStorage) para demonstração.
 // ============================================================================
-import { FIREBASE_CONFIG, APP } from "./config.js?v=9";
-import { DEFAULT_RESULTS, MATCHES, GROUPS } from "./data.js?v=9";
+import { FIREBASE_CONFIG, APP } from "./config.js?v=10";
+import { DEFAULT_RESULTS, MATCHES, GROUPS } from "./data.js?v=10";
 
 // ----------------------------------------------------------------------------
 //  MIGRAÇÃO DE PALPITES  —  quando o calendário muda, os palpites já feitos

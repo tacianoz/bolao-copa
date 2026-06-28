@@ -1,10 +1,10 @@
 // ============================================================================
 //  TRETA DAS NAÇÕES · Bolão da Copa 2026  —  aplicação (interface + roteamento)
 // ============================================================================
-import { APP } from "./config.js?v=9";
-import { TEAMS, GROUPS, MATCHES, FASES } from "./data.js?v=9";
-import { store } from "./store.js?v=9";
-import { matchPoints, pointsFor, pickQuality, totalPoints } from "./scoring.js?v=9";
+import { APP } from "./config.js?v=10";
+import { TEAMS, GROUPS, MATCHES, FASES } from "./data.js?v=10";
+import { store } from "./store.js?v=10";
+import { matchPoints, pointsFor, pickQuality, totalPoints } from "./scoring.js?v=10";
 
 const AVATARS = ["🗿", "🤙", "🐐", "🥶", "👑", "🤡", "💀", "😎", "🔥", "🥸", "🤠", "👽"];
 const $ = (s, r = document) => r.querySelector(s);
@@ -434,11 +434,11 @@ function viewRanking() {
             <b>${esc(p.displayName)}${me ? " <span class='tag-you'>você</span>" : ""}</b>
             <small>${esc(p.posto || "Em algum lugar do mundo 🌎")}</small>
             <div class="rk-bd">
-              <span class="bd c" title="Placar cravado — 10 pts">🎯 ${p.cravadas}</span>
-              <span class="bd s" title="Vencedor + saldo de gols — 7 pts">7pt ×${p.saldos}</span>
-              <span class="bd v" title="Só o vencedor — 5 pts">5pt ×${p.vencedores}</span>
-              <span class="bd m" title="Migué (gols de um time) — 2 pts">2pt ×${p.migues}</span>
-              <span class="bd a">${p.acertos} acertos</span>
+              ${p.cravadas ? `<span class="bd c" title="Cravou o placar exato — vale 10 pts"><b>${p.cravadas}</b> cravou <i>10pt</i></span>` : ""}
+              ${p.saldos ? `<span class="bd s" title="Acertou o vencedor e o saldo de gols — vale 7 pts"><b>${p.saldos}</b> saldo <i>7pt</i></span>` : ""}
+              ${p.vencedores ? `<span class="bd v" title="Acertou só o vencedor (ou o empate) — vale 5 pts"><b>${p.vencedores}</b> vencedor <i>5pt</i></span>` : ""}
+              ${p.migues ? `<span class="bd m" title="Acertou os gols de um dos times — vale 2 pts"><b>${p.migues}</b> migué <i>2pt</i></span>` : ""}
+              <span class="bd a">${p.acertos} acertos no total</span>
             </div>
           </div>
           <div class="rk-pts">${p.total}<span>pts</span></div>

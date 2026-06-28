@@ -1,8 +1,8 @@
 // ============================================================================
 //  SISTEMA DE PONTUAÇÃO
 // ============================================================================
-import { APP } from "./config.js?v=9";
-import { MATCHES } from "./data.js?v=9";
+import { APP } from "./config.js?v=10";
+import { MATCHES } from "./data.js?v=10";
 
 const P = APP.pontuacao;
 const sign = (n) => (n > 0 ? 1 : n < 0 ? -1 : 0);
