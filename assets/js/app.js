@@ -1,10 +1,10 @@
 // ============================================================================
 //  TRETA DAS NAÇÕES · Bolão da Copa 2026  —  aplicação (interface + roteamento)
 // ============================================================================
-import { APP } from "./config.js";
-import { TEAMS, GROUPS, MATCHES, FASES } from "./data.js";
-import { store } from "./store.js";
-import { matchPoints, pointsFor, pickQuality, totalPoints } from "./scoring.js";
+import { APP } from "./config.js?v=8";
+import { TEAMS, GROUPS, MATCHES, FASES } from "./data.js?v=8";
+import { store } from "./store.js?v=8";
+import { matchPoints, pointsFor, pickQuality, totalPoints } from "./scoring.js?v=8";
 
 const AVATARS = ["🗿", "🤙", "🐐", "🥶", "👑", "🤡", "💀", "😎", "🔥", "🥸", "🤠", "👽"];
 const $ = (s, r = document) => r.querySelector(s);

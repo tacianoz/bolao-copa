@@ -143,8 +143,10 @@ const r32Labels = [
   ["2º D", "2º G"], ["1º A", "3º B"], ["2º E", "2º I"], ["1º A", "2º A"]
 ];
 for (let i = 0; i < 16; i++) {
-  const day = 28 + Math.floor(i / 3); // 28/06 -> 03/07
-  knockoutMatches.push(ko(`R32-${i + 1}`, "16avos", `06-${day}`, MD_TIMES[i % 4], r32Labels[i]));
+  // 28/06 -> 03/07 (datas válidas; o results.json sobrescreve com as reais)
+  const d = 28 + Math.floor(i / 3);
+  const date = d <= 30 ? `06-${d}` : `07-0${d - 30}`;
+  knockoutMatches.push(ko(`R32-${i + 1}`, "16avos", date, MD_TIMES[i % 4], r32Labels[i]));
 }
 // Oitavas (04 a 07/07) — 8 jogos
 for (let i = 0; i < 8; i++) {
